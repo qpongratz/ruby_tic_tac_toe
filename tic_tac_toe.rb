@@ -32,6 +32,7 @@ class Player
     input = Helper.translate(gets.chomp)
     if input.nil? || @board.invalid_move?(input)
       puts "Invalid entry."
+      @board.display_board
       self.get_move
     else
       @board.update_board(input, @piece)
@@ -57,11 +58,20 @@ class Game
 
   def self.new_turn
     @@turn_count += 1
-    @@players[@@turn_count % 2].get_move
+    if @@turn_count > 9
+      self.tie_game
+    else
+      @@players[@@turn_count % 2].get_move
+    end
   end
+
   def self.end_game
     @@players[@@turn_count % 2].declare_winner
     "Thank you for playing. Come again soon."
+  end
+
+  def self.tie_game
+    puts "Tie game; no winners."
   end
 end
 
