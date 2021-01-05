@@ -1,4 +1,20 @@
+require 'pry'
+
+module Helper
+  COORDINATE_MAP = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3']
+  
+  def self.translate(coordinates)
+    index = COORDINATE_MAP.index(coordinates)
+    if index.nil?
+      index = COORDINATE_MAP.index(coordinates.reverse)
+    end
+    index
+  end
+
+end
+
 class Player
+include Helper
   
   def initialize(piece)
     @piece = piece
@@ -12,7 +28,8 @@ class Player
 
   def get_move
     puts "#{player_name}'s turn. On what space would you like a #{piece}?"
-    gets.chomp #eventually pass to a check with board once I have that setup
+    input = gets.chomp 
+  end
 end
 
 class Game
@@ -38,15 +55,11 @@ class Board
   end
 
   def display_board 
-    @display = @board_state.map {|spot| spot.nil? ? spot = ' ' : spot}
-    puts "#{@display[0]}│#{@display[1]}│#{@display[2]}"
+    display = @board_state.map {|spot| spot.nil? ? spot = ' ' : spot}
+    puts "#{display[0]}│#{display[1]}│#{display[2]}"
     puts "─┼─┼─"
-    puts "#{@display[3]}│#{@display[4]}│#{@display[5]}"
+    puts "#{display[3]}│#{display[4]}│#{display[5]}"
     puts "─┼─┼─"
-    puts "#{@display[6]}│#{@display[7]}│#{@display[8]}"    
+    puts "#{display[6]}│#{display[7]}│#{display[8]}"    
   end
-end
-
-test_board = Board.new
-test_board.display_board
 end
