@@ -80,11 +80,20 @@ class Board
   def update_board(index, piece)
     @board_state[index] = piece
     self.display_board
-    self.check_win
+    self.check_win(piece)
   end
 
-  def check_win
-
+  def check_win(piece)
+    if ([@board_state[0], @board_state[1], @board_state[2]].all?(piece) ||
+      [@board_state[3], @board_state[4], @board_state[5]].all?(piece) ||
+      [@board_state[6], @board_state[7], @board_state[8]].all?(piece) ||
+      [@board_state[0], @board_state[3], @board_state[6]].all?(piece) ||
+      [@board_state[1], @board_state[4], @board_state[7]].all?(piece) ||
+      [@board_state[2], @board_state[5], @board_state[8]].all?(piece) ||
+      [@board_state[0], @board_state[4], @board_state[8]].all?(piece) ||
+      [@board_state[2], @board_state[4], @board_state[6]].all?(piece))
+        puts "Winner!"
+    end  
   end
 end
 
