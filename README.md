@@ -1,6 +1,6 @@
 # tic_tac_toe_ruby
 To run:
-Navigate to file directory and run: ruby tic_tac_toe_ruby.rb
+Navigate to file directory and run: ruby tic_tac_toe.rb
 
 To play:
 Input for coordinates should be two characters. Order and capitalization do not matter.
