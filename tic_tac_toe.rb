@@ -4,9 +4,9 @@ module Helper
   COORDINATE_MAP = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3']
   
   def self.translate(coordinates)
-    index = COORDINATE_MAP.index(coordinates)
+    index = COORDINATE_MAP.index(coordinates.downcase)
     if index.nil?
-      index = COORDINATE_MAP.index(coordinates.reverse)
+      index = COORDINATE_MAP.index(coordinates.reverse.downcase)
     end
     index
   end
