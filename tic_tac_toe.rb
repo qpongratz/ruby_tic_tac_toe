@@ -1,25 +1,20 @@
-require 'pry'
-
 module Helper
-  COORDINATE_MAP = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3']
-  
+  COORDINATE_MAP = %w[a1 a2 a3 b1 b2 b3 c1 c2 c3].freeze
+
   def self.translate(coordinates)
     index = COORDINATE_MAP.index(coordinates.downcase)
-    if index.nil?
-      index = COORDINATE_MAP.index(coordinates.reverse.downcase)
-    end
+    index = COORDINATE_MAP.index(coordinates.reverse.downcase) if index.nil?
     index
   end
-
 end
 
 class Player
   include Helper
-  
+
   def initialize(piece, board)
     @piece = piece
     @board = board
-    self.get_player_name
+    get_player_name
   end
 
   def get_player_name
@@ -31,9 +26,9 @@ class Player
     puts "#{@player_name}'s turn. On what space would you like a #{@piece}?"
     input = Helper.translate(gets.chomp)
     if input.nil? || @board.invalid_move?(input)
-      puts "Invalid entry."
+      puts 'Invalid entry.'
       @board.display_board
-      self.get_move
+      get_move
     else
       @board.update_board(input, @piece)
     end
@@ -46,20 +41,20 @@ end
 
 class Game
   attr_accessor :board, :players
-  
+
   def initialize
     @@turn_count = 0
     self.board = Board.new
-    @@players = [(Player.new('X', self.board)), (Player.new('O', self.board))]
+    @@players = [Player.new('X', board), Player.new('O', board)]
     @@players.shuffle!
-    self.board.display_board
+    board.display_board
     Game.new_turn
   end
 
   def self.new_turn
     @@turn_count += 1
     if @@turn_count > 9
-      self.tie_game
+      tie_game
     else
       @@players[@@turn_count % 2].get_move
     end
@@ -67,28 +62,27 @@ class Game
 
   def self.end_game
     @@players[@@turn_count % 2].declare_winner
-    "Thank you for playing. Come again soon."
+    'Thank you for playing. Come again soon.'
   end
 
   def self.tie_game
-    puts "Tie game; no winners."
+    puts 'Tie game; no winners.'
   end
 end
 
 class Board
-  
   def initialize
     @board_state = Array.new(9)
   end
 
-  def display_board 
-    display = @board_state.map {|spot| spot.nil? ? spot = ' ' : spot}
-    puts "  1 2 3"
+  def display_board
+    display = @board_state.map { |spot| spot.nil? ? spot = ' ' : spot }
+    puts '  1 2 3'
     puts "a #{display[0]}│#{display[1]}│#{display[2]}"
-    puts "  ─┼─┼─"
+    puts '  ─┼─┼─'
     puts "b #{display[3]}│#{display[4]}│#{display[5]}"
-    puts "  ─┼─┼─"
-    puts "c #{display[6]}│#{display[7]}│#{display[8]}"    
+    puts '  ─┼─┼─'
+    puts "c #{display[6]}│#{display[7]}│#{display[8]}"
   end
 
   def invalid_move?(index)
@@ -97,24 +91,24 @@ class Board
 
   def update_board(index, piece)
     @board_state[index] = piece
-    self.display_board
-    self.check_win(piece)
+    display_board
+    check_win(piece)
   end
 
   def check_win(piece)
-    if ([@board_state[0], @board_state[1], @board_state[2]].all?(piece) ||
-      [@board_state[3], @board_state[4], @board_state[5]].all?(piece) ||
-      [@board_state[6], @board_state[7], @board_state[8]].all?(piece) ||
-      [@board_state[0], @board_state[3], @board_state[6]].all?(piece) ||
-      [@board_state[1], @board_state[4], @board_state[7]].all?(piece) ||
-      [@board_state[2], @board_state[5], @board_state[8]].all?(piece) ||
-      [@board_state[0], @board_state[4], @board_state[8]].all?(piece) ||
-      [@board_state[2], @board_state[4], @board_state[6]].all?(piece))
-        Game.end_game
+    if [@board_state[0], @board_state[1], @board_state[2]].all?(piece) ||
+       [@board_state[3], @board_state[4], @board_state[5]].all?(piece) ||
+       [@board_state[6], @board_state[7], @board_state[8]].all?(piece) ||
+       [@board_state[0], @board_state[3], @board_state[6]].all?(piece) ||
+       [@board_state[1], @board_state[4], @board_state[7]].all?(piece) ||
+       [@board_state[2], @board_state[5], @board_state[8]].all?(piece) ||
+       [@board_state[0], @board_state[4], @board_state[8]].all?(piece) ||
+       [@board_state[2], @board_state[4], @board_state[6]].all?(piece)
+      Game.end_game
     else
       Game.new_turn
-    end  
+    end
   end
 end
 
-new_game = Game.new
+Game.new
