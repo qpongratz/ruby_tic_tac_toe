@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Stores coordinate map and converts coordinates to array index for board class.
 module Helper
   COORDINATE_MAP = %w[a1 a2 a3 b1 b2 b3 c1 c2 c3].freeze
 
@@ -8,27 +11,29 @@ module Helper
   end
 end
 
+# Handles player names and inputs for moves.
 class Player
   include Helper
 
   def initialize(piece, board)
     @piece = piece
     @board = board
-    get_player_name
+    set_player_name
   end
 
-  def get_player_name
+  def set_player_name
     puts "What would the player of #{@piece}'s like to be called?"
     @player_name = gets.chomp
   end
 
-  def get_move
+  def play_move
     puts "#{@player_name}'s turn. On what space would you like a #{@piece}?"
+    puts 'Your input should be two characters long indicating row and column.'
     input = Helper.translate(gets.chomp)
     if input.nil? || @board.invalid_move?(input)
       puts 'Invalid entry.'
       @board.display_board
-      get_move
+      play_move
     else
       @board.update_board(input, @piece)
     end
@@ -39,6 +44,7 @@ class Player
   end
 end
 
+# Initializes other classes and delegates turns and manages end states.
 class Game
   attr_accessor :board, :players
 
@@ -56,7 +62,7 @@ class Game
     if @@turn_count > 9
       tie_game
     else
-      @@players[@@turn_count % 2].get_move
+      @@players[@@turn_count % 2].play_move
     end
   end
 
@@ -70,13 +76,14 @@ class Game
   end
 end
 
+# Displays and stores board array and checks if win condition has been met.
 class Board
   def initialize
     @board_state = Array.new(9)
   end
 
   def display_board
-    display = @board_state.map { |spot| spot.nil? ? spot = ' ' : spot }
+    display = @board_state.map { |spot| spot.nil? ? ' ' : spot }
     puts '  1 2 3'
     puts "a #{display[0]}│#{display[1]}│#{display[2]}"
     puts '  ─┼─┼─'
