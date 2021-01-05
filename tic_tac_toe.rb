@@ -34,13 +34,13 @@ class Player
       puts "Invalid entry."
       self.get_move
     else
-      self.board.place_piece(input, @piece)
+      self.board.update_board(input, @piece)
     end
   end
 end
 
 class Game
-  attr_accessor(:board)
+  attr_accessor :board
   
   def initialize
     @turn_count = 0
@@ -77,7 +77,18 @@ class Board
     @board_state[index].nil? ? false : true
   end
 
+  def update_board(index, piece)
+    @board_state[index] = piece
+    self.display_board
+    self.check_win
+  end
+
+  def check_win
+
+  end
 end
 
 board = Board.new
-p board.invalid_move?(1)
+board.update_board(8, "X")
+board.update_board(4, "X")
+board.update_board(0, "X")
