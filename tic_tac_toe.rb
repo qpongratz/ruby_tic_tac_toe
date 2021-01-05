@@ -29,12 +29,12 @@ class Player
 
   def get_move
     puts "#{@player_name}'s turn. On what space would you like a #{@piece}?"
-    index = Helper.translate(gets.chomp)
-    if index.nil? || self.board.invalid_move?(index)
+    input = Helper.translate(gets.chomp)
+    if input.nil? || self.board.invalid_move?(input)
       puts "Invalid entry."
       self.get_move
     else
-      self.board.place_piece(index, @piece)
+      self.board.place_piece(input, @piece)
     end
   end
 end
@@ -58,6 +58,7 @@ class Game
 end
 
 class Board
+  
   def initialize
     @board_state = Array.new(9)
   end
@@ -71,7 +72,12 @@ class Board
     puts "  ─┼─┼─"
     puts "c #{display[6]}│#{display[7]}│#{display[8]}"    
   end
+
+  def invalid_move?(index)
+    @board_state[index].nil? ? false : true
+  end
+
 end
 
 board = Board.new
-board.display_board
+p board.invalid_move?(1)
