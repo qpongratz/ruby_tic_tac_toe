@@ -10,9 +10,18 @@ class Player
 end
 
 class Game
+  attr_accessor(:board)
+  
   def initialize
-    @player_x = Player.new('X')
-    @player_o = Player.new('O')
+    @turn_count = 0
+    self.board = Board.new
+    @players = [(Player.new('X')), (Player.new('O'))]
+    @players.shuffle!
+  end
+
+  def new_turn
+    @turn_count += 1
+    
   end
 end
 
