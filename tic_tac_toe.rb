@@ -53,7 +53,7 @@ class Game
     self.board = Board.new
     board.game = self
     @players = [Player.new('X'), Player.new('O')]
-    @players.each{|player| player.board = board}
+    @players.each { |player| player.board = board }
     @players.shuffle!
     board.display_board
     new_turn
