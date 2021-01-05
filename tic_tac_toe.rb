@@ -36,4 +36,17 @@ class Board
   def initialize
     @board_state = Array.new(9)
   end
+
+  def display_board 
+    @display = @board_state.map {|spot| spot.nil? ? spot = ' ' : spot}
+    puts "#{@display[0]}│#{@display[1]}│#{@display[2]}"
+    puts "─┼─┼─"
+    puts "#{@display[3]}│#{@display[4]}│#{@display[5]}"
+    puts "─┼─┼─"
+    puts "#{@display[6]}│#{@display[7]}│#{@display[8]}"    
+  end
+end
+
+test_board = Board.new
+test_board.display_board
 end
