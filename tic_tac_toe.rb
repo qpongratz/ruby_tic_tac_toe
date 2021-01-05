@@ -62,13 +62,14 @@ class Board
 
   def display_board 
     display = @board_state.map {|spot| spot.nil? ? spot = ' ' : spot}
-    puts "#{display[0]}│#{display[1]}│#{display[2]}"
-    puts "─┼─┼─"
-    puts "#{display[3]}│#{display[4]}│#{display[5]}"
-    puts "─┼─┼─"
-    puts "#{display[6]}│#{display[7]}│#{display[8]}"    
+    puts "  1 2 3"
+    puts "a #{display[0]}│#{display[1]}│#{display[2]}"
+    puts "  ─┼─┼─"
+    puts "b #{display[3]}│#{display[4]}│#{display[5]}"
+    puts "  ─┼─┼─"
+    puts "c #{display[6]}│#{display[7]}│#{display[8]}"    
   end
 end
 
-new_player = Player.new('X')
-new_player.get_move
+board = Board.new
+board.display_board
