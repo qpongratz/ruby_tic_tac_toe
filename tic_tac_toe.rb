@@ -11,10 +11,13 @@ end
 
 class Game
   def initialize
-    player_x = Player.new('X')
-    player_o = Player.new('O')
+    @player_x = Player.new('X')
+    @player_o = Player.new('O')
   end
 end
 
 class Board
+  def initialize
+    @board_state = Array.new(9)
+  end
 end
