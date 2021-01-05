@@ -34,7 +34,7 @@ class Player
       puts "Invalid entry."
       self.get_move
     else
-      self.board.place_piece(index, piece)
+      self.board.place_piece(index, @piece)
     end
   end
 end
