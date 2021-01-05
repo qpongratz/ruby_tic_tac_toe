@@ -15,6 +15,7 @@ end
 
 class Player
   include Helper
+  attr_accessor :board
   
   def initialize(piece)
     @piece = piece
@@ -28,12 +29,12 @@ class Player
 
   def get_move
     puts "#{@player_name}'s turn. On what space would you like a #{@piece}?"
-    input = Helper.translate(gets.chomp)
-    if input.nil? 
+    index = Helper.translate(gets.chomp)
+    if index.nil? || self.board.invalid_move?(index)
       puts "Invalid entry."
       self.get_move
     else
-      puts "You did it!"
+      self.board.place_piece(index, piece)
     end
   end
 end
@@ -44,6 +45,7 @@ class Game
   def initialize
     @turn_count = 0
     self.board = Board.new
+    Player.board = self.board
     @players = [(Player.new('X')), (Player.new('O'))]
     @players.shuffle!
     self.new_turn
