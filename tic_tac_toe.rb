@@ -14,10 +14,10 @@ end
 # Handles player names and inputs for moves.
 class Player
   include Helper
+  attr_accessor :board
 
-  def initialize(piece, board)
+  def initialize(piece)
     @piece = piece
-    @board = board
     set_player_name
   end
 
@@ -30,12 +30,12 @@ class Player
     puts "#{@player_name}'s turn. On what space would you like a #{@piece}?"
     puts 'Your input should be two characters long indicating row and column.'
     input = Helper.translate(gets.chomp)
-    if input.nil? || @board.invalid_move?(input)
+    if input.nil? || board.invalid_move?(input)
       puts 'Invalid entry.'
-      @board.display_board
+      board.display_board
       play_move
     else
-      @board.update_board(input, @piece)
+      board.update_board(input, @piece)
     end
   end
 
@@ -49,35 +49,39 @@ class Game
   attr_accessor :board, :players
 
   def initialize
-    @@turn_count = 0
+    @turn_count = 0
     self.board = Board.new
-    @@players = [Player.new('X', board), Player.new('O', board)]
-    @@players.shuffle!
+    board.game = self
+    @players = [Player.new('X'), Player.new('O')]
+    @players.each{|player| player.board = board}
+    @players.shuffle!
     board.display_board
-    Game.new_turn
+    new_turn
   end
 
-  def self.new_turn
-    @@turn_count += 1
-    if @@turn_count > 9
+  def new_turn
+    @turn_count += 1
+    if @turn_count > 9
       tie_game
     else
-      @@players[@@turn_count % 2].play_move
+      @players[@turn_count % 2].play_move
     end
   end
 
-  def self.end_game
-    @@players[@@turn_count % 2].declare_winner
+  def end_game
+    @players[@turn_count % 2].declare_winner
     'Thank you for playing. Come again soon.'
   end
 
-  def self.tie_game
+  def tie_game
     puts 'Tie game; no winners.'
   end
 end
 
 # Displays and stores board array and checks if win condition has been met.
 class Board
+  attr_accessor :game
+
   def initialize
     @board_state = Array.new(9)
   end
@@ -111,9 +115,9 @@ class Board
        [@board_state[2], @board_state[5], @board_state[8]].all?(piece) ||
        [@board_state[0], @board_state[4], @board_state[8]].all?(piece) ||
        [@board_state[2], @board_state[4], @board_state[6]].all?(piece)
-      Game.end_game
+      game.end_game
     else
-      Game.new_turn
+      game.new_turn
     end
   end
 end
