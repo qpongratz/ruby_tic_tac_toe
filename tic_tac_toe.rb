@@ -14,7 +14,7 @@ module Helper
 end
 
 class Player
-include Helper
+  include Helper
   
   def initialize(piece)
     @piece = piece
@@ -27,8 +27,14 @@ include Helper
   end
 
   def get_move
-    puts "#{player_name}'s turn. On what space would you like a #{piece}?"
-    input = gets.chomp 
+    puts "#{@player_name}'s turn. On what space would you like a #{@piece}?"
+    input = Helper.translate(gets.chomp)
+    if input.nil? 
+      puts "Invalid entry."
+      self.get_move
+    else
+      puts "You did it!"
+    end
   end
 end
 
@@ -63,3 +69,6 @@ class Board
     puts "#{display[6]}│#{display[7]}│#{display[8]}"    
   end
 end
+
+new_player = Player.new('X')
+new_player.get_move
