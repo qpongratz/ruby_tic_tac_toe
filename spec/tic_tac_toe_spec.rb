@@ -1,28 +1,42 @@
 # frozen_string_literal: true
 
-require_relative '../tic_tac_toe.rb'
+require './tic_tac_toe'
 
 describe Player do
-  subject(:playerx) { described_class.new('X') }
+  subject(:player_x) { described_class.new('X') }
   let(:test_board) { instance_double(Board) }
-  
-
   describe '#play_move' do
     context 'playing a move' do
-      
       before do
-        allow(test_board).to receive(:display_board)
-        allow(test_board).to receive(:invalid_move?)
-        # allow(playerx).to receive(:set_player_name)
-        allow(playerx).to receive(:puts)
-        allow(playerx).to receive(:input).and_return('hello')
+        allow(player_x).to receive(:puts)
       end
-      it 'sends an input to translate' do
-        allow(playerx).to receive(:translate)
-        expect(playerx).to receive(:translate)
-        playerx.play_move(test_board)
+      it 'play a valid move' do
+        allow(player_x).to receive(:gets).and_return("a1\n")
+        allow(test_board).to receive(:invalid_move?).and_return(false)
+        expect(test_board).to receive(:update_board).once
+        player_x.play_move(test_board)
+      end
+
+      it 'play an invalid move and then a valid move' do
+        allow(player_x).to receive(:gets).and_return("a1\n")
+        allow(test_board).to receive(:invalid_move?).and_return(true, false)
+        expect(test_board).to receive(:display_board).once
+        expect(test_board).to receive(:update_board).once
+        player_x.play_move(test_board)
       end
     end
   end
-end
 
+  describe '#translate' do
+    it 'returns correct index on valid input' do
+      input = 'a1'
+      result = player_x.translate(input)
+      expect(result).to eq(0)
+    end
+    it 'returns nil on invalid input' do
+      input = 'hello'
+      result = player_x.translate(input)
+      expect(result).to be_nil
+    end
+  end
+end

@@ -128,4 +128,4 @@ class Board
   end
 end
 
-Game.new
+#Game.new
