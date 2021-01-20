@@ -4,7 +4,7 @@
 module Helper
   COORDINATE_MAP = %w[a1 a2 a3 b1 b2 b3 c1 c2 c3].freeze
 
-  def self.translate(coordinates)
+  def translate(coordinates)
     index = COORDINATE_MAP.index(coordinates.downcase)
     index = COORDINATE_MAP.index(coordinates.reverse.downcase) if index.nil?
     index
@@ -14,7 +14,6 @@ end
 # Handles player names and inputs for moves.
 class Player
   include Helper
-  attr_accessor :board
 
   def initialize(piece)
     @piece = piece
@@ -26,14 +25,14 @@ class Player
     @player_name = gets.chomp
   end
 
-  def play_move
+  def play_move(board)
     puts "#{@player_name}'s turn. On what space would you like a #{@piece}?"
     puts 'Your input should be two characters long indicating row and column.'
-    input = Helper.translate(gets.chomp)
+    input = translate(gets.chomp)
     if input.nil? || board.invalid_move?(input)
       puts 'Invalid entry.'
       board.display_board
-      play_move
+      play_move(board)
     else
       board.update_board(input, @piece)
     end
@@ -53,7 +52,6 @@ class Game
     self.board = Board.new
     board.game = self
     @players = [Player.new('X'), Player.new('O')]
-    @players.each { |player| player.board = board }
     @players.shuffle!
     board.display_board
     new_turn
@@ -64,7 +62,7 @@ class Game
     if @turn_count > 9
       tie_game
     else
-      @players[@turn_count % 2].play_move
+      @players[@turn_count % 2].play_move(board)
     end
   end
 
@@ -122,4 +120,4 @@ class Board
   end
 end
 
-Game.new
+# Game.new
