@@ -91,13 +91,14 @@ end
 # Displays and stores board array and checks if win condition has been met.
 class Board
   attr_accessor :game
+  attr_reader :board_state
 
   def initialize
     @board_state = Array.new(9)
   end
 
   def display_board
-    display = @board_state.map { |spot| spot.nil? ? ' ' : spot }
+    display = board_state.map { |spot| spot.nil? ? ' ' : spot }
     puts <<-HEREDOC
       1 2 3
     a #{display[0]}│#{display[1]}│#{display[2]}
@@ -109,7 +110,7 @@ class Board
   end
 
   def invalid_move?(index)
-    @board_state[index].nil? ? false : true
+    board_state[index].nil? ? false : true
   end
 
   def update_board(index, piece)
