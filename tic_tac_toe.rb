@@ -17,7 +17,7 @@ class Player
 
   def initialize(piece)
     @piece = piece
-    # set_player_name
+    set_player_name
   end
 
   def set_player_name
@@ -32,7 +32,7 @@ class Player
     if move.nil? || board.invalid_move?(move)
       puts 'Invalid entry.'
       board.display_board
-      # play_move(board)
+      play_move(board)
     else
       board.update_board(move, @piece)
     end
