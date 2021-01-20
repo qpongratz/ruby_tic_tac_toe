@@ -44,30 +44,34 @@ end
 describe Game do
   subject(:test_game) { described_class.new }
   let(:test_player) { instance_double(Player) }
+  let(:test_board) { instance_double(Board) }
   describe '#new_turn' do
-    context 'When starting a new turn' do
-      before do
-        test_game.players[0] = test_player
-        test_game.players[1] = test_player
-        allow(test_player).to receive(:play_move)
-      end
-      it 'Turn_count goes up by 1' do
-        turn_before = test_game.instance_variable_get(:@turn_count)
-        test_game.new_turn
-        turn_after = test_game.instance_variable_get(:@turn_count)
-        expect(turn_after).to eq(turn_before + 1)
-      end
+    before do
+      test_game.players[0] = test_player
+      test_game.players[1] = test_player
+      allow(test_player).to receive(:play_move)
+      allow(test_player).to receive(:piece)
+      allow(test_game).to receive(:tie)
+      allow(test_game).to receive(:end_game)
+      allow(test_board).to receive(:check_win)
+    end
 
-      it 'Past turn 9 return tie game' do
-        allow(test_game).to receive(:tie_game)
-        expect(test_game).to receive(:tie_game)
-        10.times { test_game.new_turn }
-      end
+    it 'Return tie game when turn count is 9' do
+      allow(test_game).to receive(:turn_count).and_return(9)
+      expect(test_game).to receive(:tie)
+      test_game.new_turn
+    end
 
-      it 'Before board fills, send play_move to players' do
-        expect(test_player).to receive(:play_move)
-        test_game.new_turn
-      end
+    it 'Before board fills, send play_move to players' do
+      expect(test_player).to receive(:play_move)
+      test_game.new_turn
+    end
+
+    it 'End_game when board returns true on check win' do
+      allow(test_board).to receive(:check_win).and_return(true)
+      allow(test_game).to receive(:end_game)
+      expect(test_game).to receive(:end_game)
+      test_game.new_turn
     end
   end
 end
