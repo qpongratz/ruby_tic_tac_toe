@@ -26,9 +26,7 @@ class Player
   end
 
   def play_move(board)
-    puts "#{@player_name}'s turn. On what space would you like a #{@piece}?"
-    puts 'Your input should be two characters long indicating row and column.'
-    move = translate(input)
+    move = obtain_move
     if move.nil? || board.invalid_move?(move)
       puts 'Invalid entry.'
       board.display_board
@@ -36,6 +34,12 @@ class Player
     else
       board.update_board(move, @piece)
     end
+  end
+
+  def obtain_move
+    puts "#{@player_name}'s turn. On what space would you like a #{@piece}?"
+    puts 'Your input should be two characters long indicating row and column.'
+    translate(input)
   end
 
   def input
@@ -124,4 +128,4 @@ class Board
   end
 end
 
-# Game.new
+Game.new

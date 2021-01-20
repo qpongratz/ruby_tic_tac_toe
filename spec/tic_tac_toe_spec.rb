@@ -13,7 +13,7 @@ describe Player do
       before do
         allow(test_board).to receive(:display_board)
         allow(test_board).to receive(:invalid_move?)
-        allow(playerx).to receive(:set_player_name)
+        # allow(playerx).to receive(:set_player_name)
         allow(playerx).to receive(:puts)
         allow(playerx).to receive(:input).and_return('hello')
       end
