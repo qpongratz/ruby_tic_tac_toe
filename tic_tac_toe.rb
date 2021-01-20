@@ -62,7 +62,7 @@ class Game
     @players = [Player.new('X'), Player.new('O')]
   end
 
-  def start_game
+  def start
     players.each(&:set_player_name)
     players.shuffle!
     board.display_board
@@ -98,12 +98,14 @@ class Board
 
   def display_board
     display = @board_state.map { |spot| spot.nil? ? ' ' : spot }
-    puts '  1 2 3'
-    puts "a #{display[0]}│#{display[1]}│#{display[2]}"
-    puts '  ─┼─┼─'
-    puts "b #{display[3]}│#{display[4]}│#{display[5]}"
-    puts '  ─┼─┼─'
-    puts "c #{display[6]}│#{display[7]}│#{display[8]}"
+    puts <<-HEREDOC
+      1 2 3
+    a #{display[0]}│#{display[1]}│#{display[2]}
+      ─┼─┼─
+    b #{display[3]}│#{display[4]}│#{display[5]}
+      ─┼─┼─
+    c #{display[6]}│#{display[7]}│#{display[8]}
+    HEREDOC
   end
 
   def invalid_move?(index)
@@ -117,20 +119,18 @@ class Board
   end
 
   def check_win(piece)
-    if [@board_state[0], @board_state[1], @board_state[2]].all?(piece) ||
-       [@board_state[3], @board_state[4], @board_state[5]].all?(piece) ||
-       [@board_state[6], @board_state[7], @board_state[8]].all?(piece) ||
-       [@board_state[0], @board_state[3], @board_state[6]].all?(piece) ||
-       [@board_state[1], @board_state[4], @board_state[7]].all?(piece) ||
-       [@board_state[2], @board_state[5], @board_state[8]].all?(piece) ||
-       [@board_state[0], @board_state[4], @board_state[8]].all?(piece) ||
-       [@board_state[2], @board_state[4], @board_state[6]].all?(piece)
+    bs = @board_state
+    if [bs[0], bs[1], bs[2]].all?(piece) ||
+       [bs[3], bs[4], bs[5]].all?(piece) ||
+       [bs[6], bs[7], bs[8]].all?(piece) ||
+       [bs[0], bs[3], bs[6]].all?(piece) ||
+       [bs[1], bs[4], bs[7]].all?(piece) ||
+       [bs[2], bs[5], bs[8]].all?(piece) ||
+       [bs[0], bs[4], bs[8]].all?(piece) ||
+       [bs[2], bs[4], bs[6]].all?(piece)
       game.end_game
     else
       game.new_turn
     end
   end
 end
-
-#new_game = Game.new
-#new_game.start_game

@@ -50,7 +50,7 @@ describe Game do
       test_game.players[1] = test_player
       allow(test_player).to receive(:play_move)
     end
-    it 'turn_count goes up by 1' do
+    it 'Turn_count goes up by 1' do
       turn_before = test_game.instance_variable_get(:@turn_count)
       test_game.new_turn
       turn_after = test_game.instance_variable_get(:@turn_count)
@@ -67,6 +67,5 @@ describe Game do
       expect(test_player).to receive(:play_move)
       test_game.new_turn
     end
-
   end
 end
