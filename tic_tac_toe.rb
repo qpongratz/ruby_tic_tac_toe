@@ -81,7 +81,7 @@ class Game
 
   def end_game
     players[@turn_count % 2].declare_winner
-    'Thank you for playing. Come again soon.'
+    puts 'Thank you for playing. Come again soon.'
   end
 
   def tie

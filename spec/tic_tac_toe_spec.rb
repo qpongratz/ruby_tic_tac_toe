@@ -89,4 +89,70 @@ describe Board do
       expect(result).to be true
     end
   end
+  describe '#check_win' do
+    let(:test_array) { Array.new(9) }
+    let(:test_piece) { 'X' }
+    context 'Row wins' do
+      it 'Top row' do
+        test_array[0] = test_piece
+        test_array[1] = test_piece
+        test_array[2] = test_piece
+        allow(test_board).to receive(:board_state).and_return(test_array)
+        expect(test_board.check_win(test_piece)).to eq true
+      end
+      it 'Middle row' do
+        test_array[3] = test_piece
+        test_array[4] = test_piece
+        test_array[5] = test_piece
+        allow(test_board).to receive(:board_state).and_return(test_array)
+        expect(test_board.check_win(test_piece)).to eq true
+      end
+      it 'Bottom row' do
+        test_array[6] = test_piece
+        test_array[7] = test_piece
+        test_array[8] = test_piece
+        allow(test_board).to receive(:board_state).and_return(test_array)
+        expect(test_board.check_win(test_piece)).to eq true
+      end
+    end
+    context 'Column wins' do
+      it 'Left column' do
+        test_array[0] = test_piece
+        test_array[3] = test_piece
+        test_array[6] = test_piece
+        allow(test_board).to receive(:board_state).and_return(test_array)
+        expect(test_board.check_win(test_piece)).to eq true
+      end
+      it 'Middle column' do
+        test_array[1] = test_piece
+        test_array[4] = test_piece
+        test_array[7] = test_piece
+        allow(test_board).to receive(:board_state).and_return(test_array)
+        expect(test_board.check_win(test_piece)).to eq true
+      end
+      it 'Right column' do
+        test_array[2] = test_piece
+        test_array[5] = test_piece
+        test_array[8] = test_piece
+        allow(test_board).to receive(:board_state).and_return(test_array)
+        expect(test_board.check_win(test_piece)).to eq true
+      end
+    end
+    context 'Diagonal wins' do
+      it 'First diagonal' do
+        test_array[0] = test_piece
+        test_array[4] = test_piece
+        test_array[8] = test_piece
+        allow(test_board).to receive(:board_state).and_return(test_array)
+        expect(test_board.check_win(test_piece)).to eq true
+      end
+      it 'Second diagonal' do
+        test_array[2] = test_piece
+        test_array[4] = test_piece
+        test_array[6] = test_piece
+        allow(test_board).to receive(:board_state).and_return(test_array)
+        expect(test_board.check_win(test_piece)).to eq true
+      end
+    end
+  end
 end
