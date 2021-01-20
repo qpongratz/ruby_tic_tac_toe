@@ -14,13 +14,14 @@ end
 # Handles player names and inputs for moves.
 class Player
   include Helper
+  attr_reader :piece, :player_name
 
   def initialize(piece)
     @piece = piece
   end
 
   def set_player_name
-    puts "What would the player of #{@piece}'s like to be called?"
+    puts "What would the player of #{piece}'s like to be called?"
     @player_name = input
   end
 
@@ -31,12 +32,12 @@ class Player
       board.display_board
       play_move(board)
     else
-      board.update_board(move, @piece)
+      board.update_board(move, piece)
     end
   end
 
   def obtain_move
-    puts "#{@player_name}'s turn. On what space would you like a #{@piece}?"
+    puts "#{player_name}'s turn. On what space would you like a #{piece}?"
     puts 'Your input should be two characters long indicating row and column.'
     translate(input)
   end
@@ -46,7 +47,7 @@ class Player
   end
 
   def declare_winner
-    puts "Congratulations, #{@player_name}! You have won!"
+    puts "Congratulations, #{player_name}! You have won!"
   end
 end
 
@@ -54,11 +55,9 @@ end
 class Game
   attr_accessor :board, :players, :turn_count
 
-
   def initialize
     @turn_count = 0
     @board = Board.new
-    board.game = self
     @players = [Player.new('X'), Player.new('O')]
   end
 
@@ -70,12 +69,13 @@ class Game
   end
 
   def new_turn
-    @turn_count += 1
-    if turn_count > 9
-      tie_game
-    else
-      players[@turn_count % 2].play_move(board)
+    while turn_count < 10
+      @turn_count += 1
+      current_player = players[turn_count % 2]
+      current_player.play_move(board)
+      return end_game if board.check_win(current_player.piece)
     end
+    tie
   end
 
   def end_game
@@ -83,14 +83,13 @@ class Game
     'Thank you for playing. Come again soon.'
   end
 
-  def tie_game
+  def tie
     puts 'Tie game; no winners.'
   end
 end
 
 # Displays and stores board array and checks if win condition has been met.
 class Board
-  attr_accessor :game
   attr_reader :board_state
 
   def initialize
@@ -114,24 +113,19 @@ class Board
   end
 
   def update_board(index, piece)
-    @board_state[index] = piece
+    board_state[index] = piece
     display_board
-    check_win(piece)
   end
 
   def check_win(piece)
-    bs = @board_state
-    if [bs[0], bs[1], bs[2]].all?(piece) ||
-       [bs[3], bs[4], bs[5]].all?(piece) ||
-       [bs[6], bs[7], bs[8]].all?(piece) ||
-       [bs[0], bs[3], bs[6]].all?(piece) ||
-       [bs[1], bs[4], bs[7]].all?(piece) ||
-       [bs[2], bs[5], bs[8]].all?(piece) ||
-       [bs[0], bs[4], bs[8]].all?(piece) ||
-       [bs[2], bs[4], bs[6]].all?(piece)
-      game.end_game
-    else
-      game.new_turn
-    end
+    bs = board_state
+    [bs[0], bs[1], bs[2]].all?(piece)   ||
+      [bs[3], bs[4], bs[5]].all?(piece) ||
+      [bs[6], bs[7], bs[8]].all?(piece) ||
+      [bs[0], bs[3], bs[6]].all?(piece) ||
+      [bs[1], bs[4], bs[7]].all?(piece) ||
+      [bs[2], bs[5], bs[8]].all?(piece) ||
+      [bs[0], bs[4], bs[8]].all?(piece) ||
+      [bs[2], bs[4], bs[6]].all?(piece)
   end
 end
