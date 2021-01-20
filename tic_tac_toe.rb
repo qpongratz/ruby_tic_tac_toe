@@ -17,7 +17,6 @@ class Player
 
   def initialize(piece)
     @piece = piece
-    set_player_name
   end
 
   def set_player_name
@@ -53,29 +52,34 @@ end
 
 # Initializes other classes and delegates turns and manages end states.
 class Game
-  attr_accessor :board, :players
+  attr_accessor :board, :players, :turn_count
+
 
   def initialize
     @turn_count = 0
-    self.board = Board.new
+    @board = Board.new
     board.game = self
     @players = [Player.new('X'), Player.new('O')]
-    @players.shuffle!
+  end
+
+  def start_game
+    players.each { |player| player.set_player_name }
+    players.shuffle!
     board.display_board
     new_turn
   end
 
   def new_turn
     @turn_count += 1
-    if @turn_count > 9
+    if turn_count > 9
       tie_game
     else
-      @players[@turn_count % 2].play_move(board)
+      players[@turn_count % 2].play_move(board)
     end
   end
 
   def end_game
-    @players[@turn_count % 2].declare_winner
+    players[@turn_count % 2].declare_winner
     'Thank you for playing. Come again soon.'
   end
 
@@ -128,4 +132,5 @@ class Board
   end
 end
 
-#Game.new
+new_game = Game.new
+new_game.start_game

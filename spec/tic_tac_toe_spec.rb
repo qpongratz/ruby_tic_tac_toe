@@ -40,3 +40,18 @@ describe Player do
     end
   end
 end
+
+describe Game do
+  subject(:test_game) { described_class.new }
+  let(:player) { instance_double(Player) }
+  describe '#new_turn' do
+    it 'turn count is less than 10' do
+      @players = []
+      @players << player
+      @players << player
+      @turn_count = 4
+      expect(player).to receive(:play_move)
+      test_game.new_turn
+    end
+  end
+end
