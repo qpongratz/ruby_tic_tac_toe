@@ -63,7 +63,7 @@ class Game
   end
 
   def start_game
-    players.each { |player| player.set_player_name }
+    players.each(&:set_player_name)
     players.shuffle!
     board.display_board
     new_turn
@@ -132,5 +132,5 @@ class Board
   end
 end
 
-new_game = Game.new
-new_game.start_game
+#new_game = Game.new
+#new_game.start_game

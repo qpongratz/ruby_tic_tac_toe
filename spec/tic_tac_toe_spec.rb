@@ -43,15 +43,30 @@ end
 
 describe Game do
   subject(:test_game) { described_class.new }
-  let(:player) { instance_double(Player) }
+  let(:test_player) { instance_double(Player) }
   describe '#new_turn' do
-    it 'turn count is less than 10' do
-      @players = []
-      @players << player
-      @players << player
-      @turn_count = 4
-      expect(player).to receive(:play_move)
+    before do
+      test_game.players[0] = test_player
+      test_game.players[1] = test_player
+      allow(test_player).to receive(:play_move)
+    end
+    it 'turn_count goes up by 1' do
+      turn_before = test_game.instance_variable_get(:@turn_count)
+      test_game.new_turn
+      turn_after = test_game.instance_variable_get(:@turn_count)
+      expect(turn_after).to eq(turn_before + 1)
+    end
+
+    it 'Past turn 9 return tie game' do
+      allow(test_game).to receive(:tie_game)
+      expect(test_game).to receive(:tie_game)
+      10.times { test_game.new_turn }
+    end
+
+    it 'Before board fills, send play_move to players' do
+      expect(test_player).to receive(:play_move)
       test_game.new_turn
     end
+
   end
 end
