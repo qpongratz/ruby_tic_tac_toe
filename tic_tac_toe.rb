@@ -17,25 +17,29 @@ class Player
 
   def initialize(piece)
     @piece = piece
-    set_player_name
+    # set_player_name
   end
 
   def set_player_name
     puts "What would the player of #{@piece}'s like to be called?"
-    @player_name = gets.chomp
+    @player_name = input
   end
 
   def play_move(board)
     puts "#{@player_name}'s turn. On what space would you like a #{@piece}?"
     puts 'Your input should be two characters long indicating row and column.'
-    input = translate(gets.chomp)
-    if input.nil? || board.invalid_move?(input)
+    move = translate(input)
+    if move.nil? || board.invalid_move?(move)
       puts 'Invalid entry.'
       board.display_board
-      play_move(board)
+      # play_move(board)
     else
-      board.update_board(input, @piece)
+      board.update_board(move, @piece)
     end
+  end
+
+  def input
+    gets.chomp
   end
 
   def declare_winner
